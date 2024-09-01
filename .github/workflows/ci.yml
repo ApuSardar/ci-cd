@@ -25,6 +25,10 @@ jobs:
         options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
         timeout: 600s
 
+    env:
+      APP_KEY: base64:Vbbz48G5EBU/AOR0SNyi+fkEsIZY/io7JbMAWlUj/cU=
+      DB_PASSWORD: root@admin
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -40,6 +44,11 @@ jobs:
 
     - name: Copy .env
       run: cp .env.example .env
+
+    - name: Set environment variables in .env
+      run: |
+        echo "APP_KEY=base64:Vbbz48G5EBU/AOR0SNyi+fkEsIZY/io7JbMAWlUj/cU=" >> .env
+        echo "DB_PASSWORD=root@admin" >> .env
 
     - name: Generate application key
       run: php artisan key:generate
